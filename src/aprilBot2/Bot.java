@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;    
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -41,6 +42,8 @@ public class Bot {
 	public static void main(String[] args) throws IOException{
 		
 		Record currRecord;
+		//  List arranged: Nearest Date ----> Farthest Date
+		List<Record> records = new LinkedList <Record>();
 		
 		// TODO Auto-generated method stub
 		
@@ -84,13 +87,67 @@ public class Bot {
             //System.out.println("|"+row.get(0).getClass().getName()+"***");
             boolean b = row.get(0) instanceof String;
             System.out.println(b);
-            currRecord = new Record(row.get(0),row.get(1),row.get(2),row.get(3),row.get(4));
-            System.out.println("curr " + currRecord.tagTime);
+            currRecord = new Record(row.get(0),row.get(1),row.get(2),row.get(3),row.get(4),row.get(5));
+            //System.out.println("curr " + currRecord.tagTime);
             //currRecord = new Record(row.get(0),row.get(1),row.get(2),row.get(3), row.get(4), row.get(5));
-            //currRecord = new Record(row.get(0),"b","c","d","e","f");		
+            //currRecord = new Record(row.get(0),"b","c","d","e","f");	
+            
+         
+            //records.add(currRecord);
+            insertRecord(records,currRecord);
           }
+          System.out.println("Printing List!");
+          printMe(records);
+          //Record tempRecord = new Record("11/12/2017 11:11:11", "Empress Ep 11", "10/11/2018", "11:11:00", "gabby", "sida");
+          //records.add(2, tempRecord);
+          //System.out.println("added");
+          //printMe(records);
         }
 		
+	}
+	
+	
+	private static void insertRecord(List<Record> records, Record currRecord)
+	{
+		int comparison;
+		boolean inserted = false;
+		Record iRecord;
+		
+		if (records.isEmpty())
+		{
+			records.add(currRecord);
+			inserted = true;
+		}
+		else
+		{
+			for (int i = 0; i < records.size() && inserted==false; i++) {
+				//System.out.println(records.get(i));
+				iRecord = records.get(i); 
+				comparison = currRecord.dateVar.compareTo(iRecord.dateVar);
+				if (comparison < 0)
+				{
+					records.add(i, currRecord);
+					inserted = true;
+				}
+			}
+		}
+		
+		if (inserted == false) // record is the farthest away so add to end of list
+		{
+			records.add(currRecord);
+		}
+		
+	}
+	
+	
+	
+	private static void printMe(List<Record> records)
+	{
+		for (Record currRecord : records)
+		{
+			System.out.println(currRecord.printRecord());
+		}
+			
 	}
 	
 	/** Application name. */
