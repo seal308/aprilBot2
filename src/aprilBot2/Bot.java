@@ -36,6 +36,9 @@ import java.util.List;
 
 public class Bot {
 	
+	//MessageChannel channel = jda.getTextChannelById(271071244982550540L);
+    //channel.sendMessage("http://i.imgur.com/W652eie.png").queue();
+	
 	public static JDA jda;
 	
 	public static final String BOT_TOKEN = "MzA2ODUxOTczNjMyNjIyNTky.C-Jxvw.7JoqH7wigk40coSs-7HHQi-rfDQ";
@@ -49,7 +52,7 @@ public class Bot {
 		// TODO Auto-generated method stub
 		
 		try {
-            jda = new JDABuilder(AccountType.BOT).addListener(new BotListener()).setToken(BOT_TOKEN).buildBlocking();
+            jda = new JDABuilder(AccountType.BOT).addEventListener(new BotListener()).setToken(BOT_TOKEN).buildBlocking();
         } catch (LoginException | IllegalArgumentException | InterruptedException | RateLimitedException e) {
             e.printStackTrace();
         }
@@ -107,6 +110,21 @@ public class Bot {
         
         //String test = "mik";
         //MessageChannel.sendMessage(test);
+        
+        long seconds = -1;
+        
+        MessageChannel channel = jda.getTextChannelById(271071244982550540L);
+        
+        Scheduling schedule = new Scheduling(seconds,records,channel);
+        schedule.activateAlarmThenStop();
+        
+        //MessageChannel channel = event.getChannel();
+        //MessageChannel#sendMessage(String).queue();
+        
+        //jda.getTextChannelById(271071244982550540L);
+        //MessageChannel#sendMessage(String).queue();
+        MessageChannel testchannel = jda.getTextChannelById(271071244982550540L);
+        testchannel.sendMessage("http://i.imgur.com/W652eie.png").queue();
 		
 	}
 	
@@ -228,9 +246,5 @@ public class Bot {
                 .build();
     }
     
-    public static void sendMessage(MessageChannel channel, String message) 
-    {
-        channel.sendMessage(message).queue();
-    }
 
 }

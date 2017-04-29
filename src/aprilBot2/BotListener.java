@@ -8,6 +8,8 @@ public class BotListener extends ListenerAdapter {
 	 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
+    	
+    	
         if (e.getMessage().getRawContent().equalsIgnoreCase("ping")) {
             e.getChannel().sendMessage(e.getAuthor().getAsMention() + "http://i.imgur.com/OYFzoGP.png").queue();
         }
