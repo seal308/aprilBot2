@@ -7,6 +7,7 @@ import javax.security.auth.login.LoginException;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
+import net.dv8tion.jda.core.entities.MessageChannel;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.*;
 
@@ -103,6 +104,9 @@ public class Bot {
           //System.out.println("added");
           //printMe(records);
         }
+        
+        //String test = "mik";
+        //MessageChannel.sendMessage(test);
 		
 	}
 	
@@ -222,6 +226,11 @@ public class Bot {
         return new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential)
                 .setApplicationName(APPLICATION_NAME)
                 .build();
+    }
+    
+    public static void sendMessage(MessageChannel channel, String message) 
+    {
+        channel.sendMessage(message).queue();
     }
 
 }
