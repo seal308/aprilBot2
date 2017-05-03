@@ -32,6 +32,23 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.util.concurrent.TimeUnit.*;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledFuture;
+
+/*
+ * Main code repeats at 1 min intervals
+ * Problem was scheduling java scheduler never ends
+ * So after 10 repeats you have 10 processes running b/c of the scheduler in the main method
+ * so if delete row for 1 main repeat after 10 repeats. The 9 other repeats will post the thing,
+ * Idea was to test by having main method loop every minute and having scheduling java stop at 59 sec
+ * issue was after 59 sec to 1min nothing happening. So if have to post a message it can't, so if schedule has for 1pm for instance it wouldn't show
+ * Idea was to use 61 sec for scheduling java. This gives 2 repeats all the time, but better than 100s
+ * must test out before implementaiton
+ * 
+ * update: Also made so that if time past to post thing, it wouldn't post b/c of repeat have to think about that.
+ */
 
 
 public class Bot {
@@ -45,6 +62,30 @@ public class Bot {
 	
 	public static void main(String[] args) throws IOException{
 		
+		//final Sheets service = getSheetsService();
+		
+		final ScheduledExecutorService scheduler =
+   		     Executors.newScheduledThreadPool(1);
+     final Runnable beeper = new Runnable() {
+         public void run() {try {
+			repeatCode();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}}
+       };
+       
+       final ScheduledFuture<?> beeperHandle =
+         scheduler.scheduleAtFixedRate(beeper, 0, 1, MINUTES);
+		
+		
+		
+		
+	}
+	
+	public static void repeatCode() throws IOException
+	{
+		final Sheets service = getSheetsService();
 		Record currRecord;
 		//  List arranged: Nearest Date ----> Farthest Date
 		List<Record> records = new LinkedList <Record>();
@@ -61,7 +102,6 @@ public class Bot {
 		//Start of main quickstart code
 
         // Build a new authorized API client service.
-        Sheets service = getSheetsService();
 
         // Prints the names and majors of students in a sample spreadsheet:
         // https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit
@@ -82,7 +122,10 @@ public class Bot {
 
 
           System.out.println("Name, Major");
-
+          
+          
+          
+          records.clear();
 
           for (List row : values) {
             // Print columns A and E, which correspond to indices 0 and 4.
@@ -125,7 +168,6 @@ public class Bot {
         //MessageChannel#sendMessage(String).queue();
         MessageChannel testchannel = jda.getTextChannelById(271071244982550540L);
         testchannel.sendMessage("http://i.imgur.com/W652eie.png").queue();
-		
 	}
 	
 	

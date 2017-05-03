@@ -44,6 +44,8 @@ public class Scheduling {
 	    ScheduledFuture<?> soundAlarmFuture = fScheduler.schedule(
 	      soundAlarmTask, startTime, TimeUnit.SECONDS
 	    );
+	    Runnable stopAlarm = new StopAlarmTask(soundAlarmFuture);
+	    fScheduler.schedule(stopAlarm, 61, TimeUnit.SECONDS);
 	    
 	    System.out.println("methodStartTime: " + startTime);
 	    
@@ -67,12 +69,17 @@ public class Scheduling {
 	  private static final boolean DONT_INTERRUPT_IF_RUNNING = false;
 	  
 	  private final class SoundAlarmTask implements Runnable {
+		  int comparison = -1;
 	    @Override public void run() {
 	      ++fCount;
 	      log("beep " + fCount);
 	      System.out.println("Pancakes");
 	      System.out.println(LL.get(counter).show);
-	      channel.sendMessage(LL.get(counter).show).queue();
+	      //comparison = currRecord.dateVar.compareTo(iRecord.dateVar);
+	      if(LL.get(counter).dateVar.getTime()>=System.currentTimeMillis())
+	      {
+	    	 channel.sendMessage(LL.get(counter).show).queue();
+	      }
 	      //MessageChannel channel = jda.getTextChannelById(271071244982550540L);
 	      //channel.sendMessage("http://i.imgur.com/W652eie.png").queue();
 	      if (counter < LL.size())
@@ -86,5 +93,21 @@ public class Scheduling {
 	    }
 	    private int fCount;
 	  }
+	  
+	  private final class StopAlarmTask implements Runnable {
+		    StopAlarmTask(ScheduledFuture<?> aSchedFuture){
+		      fSchedFuture = aSchedFuture;
+		    }
+		    @Override public void run() {
+		      log("Stopping alarm.");
+		      fSchedFuture.cancel(DONT_INTERRUPT_IF_RUNNING);
+		      /* 
+		       Note that this Task also performs cleanup, by asking the 
+		       scheduler to shutdown gracefully. 
+		      */
+		      fScheduler.shutdown();
+		    }
+		    private ScheduledFuture<?> fSchedFuture;
+		  }
 
 	} 
