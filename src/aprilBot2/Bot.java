@@ -64,6 +64,7 @@ public class Bot {
 		
 		//final Sheets service = getSheetsService();
 		
+		
 		final ScheduledExecutorService scheduler =
    		     Executors.newScheduledThreadPool(1);
      final Runnable beeper = new Runnable() {
@@ -76,7 +77,7 @@ public class Bot {
        };
        
        final ScheduledFuture<?> beeperHandle =
-         scheduler.scheduleAtFixedRate(beeper, 0, 1, MINUTES);
+         scheduler.scheduleAtFixedRate(beeper, 0, 3600, SECONDS);
 		
 		
 		
@@ -156,7 +157,7 @@ public class Bot {
         
         long seconds = -1;
         
-        MessageChannel channel = jda.getTextChannelById(271071244982550540L);
+        MessageChannel channel = jda.getTextChannelById(290258156716687363L);
         
         Scheduling schedule = new Scheduling(seconds,records,channel);
         schedule.activateAlarmThenStop();
@@ -166,8 +167,11 @@ public class Bot {
         
         //jda.getTextChannelById(271071244982550540L);
         //MessageChannel#sendMessage(String).queue();
-        MessageChannel testchannel = jda.getTextChannelById(271071244982550540L);
-        testchannel.sendMessage("http://i.imgur.com/W652eie.png").queue();
+        
+        
+        MessageChannel testchannel = jda.getTextChannelById(290258156716687363L);
+        //testchannel.sendMessage("http://i.imgur.com/W652eie.png").queue();
+        // ABOVE IS THE PRINT MESSAGE THAT HELPS TO SEE WHEN IT GOES ON AND REPEATS!!!!
 	}
 	
 	

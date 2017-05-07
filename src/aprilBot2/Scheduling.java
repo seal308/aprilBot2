@@ -45,7 +45,7 @@ public class Scheduling {
 	      soundAlarmTask, startTime, TimeUnit.SECONDS
 	    );
 	    Runnable stopAlarm = new StopAlarmTask(soundAlarmFuture);
-	    fScheduler.schedule(stopAlarm, 61, TimeUnit.SECONDS);
+	    fScheduler.schedule(stopAlarm, 3601, TimeUnit.SECONDS);
 	    
 	    System.out.println("methodStartTime: " + startTime);
 	    
@@ -78,7 +78,7 @@ public class Scheduling {
 	      //comparison = currRecord.dateVar.compareTo(iRecord.dateVar);
 	      if(LL.get(counter).dateVar.getTime()>=System.currentTimeMillis())
 	      {
-	    	 channel.sendMessage(LL.get(counter).show).queue();
+	    	 channel.sendMessage(LL.get(counter).img).queue();
 	      }
 	      //MessageChannel channel = jda.getTextChannelById(271071244982550540L);
 	      //channel.sendMessage("http://i.imgur.com/W652eie.png").queue();
